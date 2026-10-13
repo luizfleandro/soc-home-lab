@@ -1,0 +1,51 @@
+# SOC Home Lab — Fase 1: alvos (vítimas) do laboratório
+#
+# Decisões de segurança:
+# - Nenhuma porta é publicada ("ports:"). Os containers só são acessíveis
+#   a partir do próprio notebook, pelos IPs da rede 172.30.0.0/24.
+#   Isso importa porque o Docker ignora o firewall ufw quando publica portas.
+# - A interface de rede tem nome fixo (br-lab) para o Suricata escutá-la na Fase 3.
+
+name: soc-lab
+
+services:
+  vitima-ssh:
+    image: lscr.io/linuxserver/openssh-server:latest
+    container_name: vitima-ssh
+    hostname: vitima-ssh
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Sao_Paulo
+      - USER_NAME=${SSH_USER}
+      - USER_PASSWORD=${SSH_PASSWORD}
+      - PASSWORD_ACCESS=true      # senha habilitada de propósito (alvo do brute force)
+      - SUDO_ACCESS=false
+    volumes:
+      - ./data/ssh:/config        # logs do SSH ficam em ./data/ssh/logs/openssh/
+    networks:
+      lab:
+        ipv4_address: 172.30.0.10
+    restart: "no"                 # só sobe quando você ligar o lab
+    mem_limit: 128m
+
+  juice-shop:
+    image: bkimminich/juice-shop:latest
+    container_name: juice-shop
+    hostname: juice-shop
+    networks:
+      lab:
+        ipv4_address: 172.30.0.20
+    restart: "no"
+    mem_limit: 384m
+
+networks:
+  lab:
+    name: lab
+    driver: bridge
+    driver_opts:
+      com.docker.network.bridge.name: br-lab
+    ipam:
+      config:
+        - subnet: 172.30.0.0/24
+          gateway: 172.30.0.1

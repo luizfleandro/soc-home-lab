@@ -1,0 +1,11 @@
+# Segredos
+.env
+configs/.env
+
+# Dados e logs gerados pelos containers
+configs/data/
+data/
+
+# Gravações brutas do terminal (podem conter senhas)
+*.log
+lab-notas/
