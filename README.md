@@ -1,52 +1,52 @@
-# 🛡️ SOC Home Lab
+# SOC Home Lab
 
-Laboratório doméstico de **Blue Team / SOC** montado em um notebook com **6 GB de RAM** e **Linux Mint 22.3**, para simular ataques, detectá-los com um SIEM e um IDS, e documentar cada investigação.
+A **Blue Team / SOC** home lab built on a laptop with **6 GB of RAM** running **Linux Mint 22.3**, used to simulate attacks, detect them with a SIEM and an IDS, and document each investigation.
 
-> 🚧 Em construção. Status atual: **Fase 2, SIEM.**
+> Work in progress. Current stage: **Phase 2, SIEM.**
 
-## Arquitetura
+## Architecture
 
 ```mermaid
 flowchart LR
-    subgraph HOST["Notebook - Linux Mint 22.3"]
-        ATK["Atacante<br/>Nmap, Hydra, navegador"]
+    subgraph HOST["Laptop - Linux Mint 22.3"]
+        ATK["Attacker<br/>Nmap, Hydra, browser"]
         SPLUNK["SIEM<br/>Splunk Free"]
         IDS["IDS<br/>Suricata"]
-        subgraph LAB["Rede Docker isolada br-lab - 172.30.0.0/24"]
+        subgraph LAB["Isolated Docker network br-lab - 172.30.0.0/24"]
             SSH["vitima-ssh<br/>172.30.0.10"]
             JUICE["juice-shop<br/>172.30.0.20"]
         end
     end
-    ATK -->|ataques| SSH
-    ATK -->|ataques| JUICE
-    IDS -.->|monitora| LAB
+    ATK -->|attacks| SSH
+    ATK -->|attacks| JUICE
+    IDS -.->|monitors| LAB
     SSH -->|logs| SPLUNK
-    IDS -->|alertas| SPLUNK
+    IDS -->|alerts| SPLUNK
 ```
 
-## O que este lab demonstra
+## What this lab demonstrates
 
-- Montagem de ambiente isolado com **Docker** e decisões de hardening
-- Coleta e investigação de logs em **SIEM (Splunk / SPL)**
-- Detecção de ataques de rede com **IDS (Suricata)**
-- Simulação de ataques e mapeamento no **MITRE ATT&CK**
-- Escrita de **relatórios de incidente**
+- Building an isolated environment with **Docker**, including hardening decisions
+- Log collection and investigation in a **SIEM (Splunk / SPL)**
+- Network attack detection with an **IDS (Suricata)**
+- Attack simulation mapped to **MITRE ATT&CK**
+- Writing **incident reports**
 
-## Fases
+## Phases
 
-| Fase | Conteúdo | Status |
+| Phase | Content | Status |
 |---|---|---|
-| 1 | [Base: Docker, firewall e rede isolada](docs/01-base-docker-rede.md) | ✅ |
-| 2 | [SIEM: Splunk Free](docs/02-splunk.md) | 🟡 |
-| 3 | IDS: Suricata | ⬜ |
-| 4 | Ataques, detecções e relatórios | ⬜ |
+| 1 | [Base: Docker, firewall and isolated network](docs/01-base-docker-network.md) | Done |
+| 2 | [SIEM: Splunk Free](docs/02-splunk.md) | In progress |
+| 3 | IDS: Suricata | Planned |
+| 4 | Attacks, detections and reports | Planned |
 
-## Restrições e decisões principais
+## Key constraints and decisions
 
-- **6 GB de RAM:** containers no lugar de máquinas virtuais; o lab só fica ligado durante o estudo.
-- **Splunk Free em vez de Wazuh:** a implantação do Wazuh em Docker exige no mínimo 8 GB de RAM.
-- **Nenhuma porta publicada:** os alvos vulneráveis ficam inacessíveis para o resto da rede.
+- **6 GB of RAM:** containers instead of virtual machines; the lab only runs during study sessions.
+- **Splunk Free instead of Wazuh:** the Wazuh Docker deployment requires at least 8 GB of RAM.
+- **No published ports:** the intentionally vulnerable targets are unreachable from the rest of the network.
 
-## ⚖️ Aviso
+## Disclaimer
 
-Todas as ferramentas ofensivas foram usadas **exclusivamente contra os containers deste laboratório**.
+All offensive tools were used **exclusively against the containers in this lab**.
