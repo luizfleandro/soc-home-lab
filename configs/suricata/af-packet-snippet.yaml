@@ -1,0 +1,14 @@
+# Trecho de /etc/suricata/suricata.yaml
+# Faz o Suricata escutar na interface da rede do lab (br-lab).
+af-packet:
+  - interface: br-lab
+    cluster-id: 99
+    cluster-type: cluster_flow
+    defrag: yes
+    tpacket-v3: yes
+
+# No topo do arquivo, em "vars -> address-groups", defina a rede do lab:
+# vars:
+#   address-groups:
+#     HOME_NET: "[172.30.0.0/24]"
+#     EXTERNAL_NET: "any" # lab: attacker is inside HOME_NET

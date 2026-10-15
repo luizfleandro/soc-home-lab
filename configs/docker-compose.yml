@@ -1,10 +1,10 @@
-# SOC Home Lab — Fase 1: alvos (vítimas) do laboratório
+# SOC Home Lab - Phase 1: lab targets
 #
-# Decisões de segurança:
-# - Nenhuma porta é publicada ("ports:"). Os containers só são acessíveis
-#   a partir do próprio notebook, pelos IPs da rede 172.30.0.0/24.
-#   Isso importa porque o Docker ignora o firewall ufw quando publica portas.
-# - A interface de rede tem nome fixo (br-lab) para o Suricata escutá-la na Fase 3.
+# Security decisions:
+# - No ports are published ("ports:"). The containers are only reachable
+#   from the laptop itself, through the 172.30.0.0/24 network.
+#   This matters because Docker bypasses the ufw firewall for published ports.
+# - The network interface has a fixed name (br-lab) so the IDS can listen on it in Phase 3.
 
 name: soc-lab
 
@@ -19,14 +19,14 @@ services:
       - TZ=America/Sao_Paulo
       - USER_NAME=${SSH_USER}
       - USER_PASSWORD=${SSH_PASSWORD}
-      - PASSWORD_ACCESS=true      # senha habilitada de propósito (alvo do brute force)
+      - PASSWORD_ACCESS=true      # password login enabled on purpose (brute force target)
       - SUDO_ACCESS=false
     volumes:
-      - ./data/ssh:/config        # logs do SSH ficam em ./data/ssh/logs/openssh/
+      - ./data/ssh:/config        # SSH logs are stored in ./data/ssh/logs/openssh/
     networks:
       lab:
         ipv4_address: 172.30.0.10
-    restart: "no"                 # só sobe quando você ligar o lab
+    restart: "no"                 # only runs when the lab is started
     mem_limit: 128m
 
   juice-shop:

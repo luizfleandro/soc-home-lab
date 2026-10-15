@@ -1,38 +1,37 @@
-# Fase 1: Base, firewall e rede isolada
+# Phase 1: Base setup, firewall and isolated network
 
-## Objetivo
+## Goal
 
-Preparar o notebook para o laboratório: firewall ativo, Docker instalado e dois alvos vulneráveis rodando em uma rede isolada, sem exposição para a rede da casa.
+Prepare the laptop for the lab: firewall enabled, Docker installed, and two intentionally vulnerable targets running on an isolated network that is not exposed to the home network.
 
-## Decisões
+## Decisions
 
-- **Containers em vez de máquinas virtuais:** com 6 GB de RAM, uma VM de Ubuntu consumiria mais de 1 GB. Os dois containers usam juntos menos de 500 MB (limites definidos com `mem_limit`).
-- **Rede com nome fixo (`br-lab`) e IPs fixos:** facilita apontar o IDS para a interface certa na Fase 3 e escrever buscas no SIEM.
-- **Alvos escolhidos:**
-  - `vitima-ssh`: servidor SSH com senha fraca, alvo de brute force.
-  - `juice-shop`: aplicação web vulnerável mantida pela OWASP, alvo de ataques web.
-- <!-- Acrescente outras decisões que tomar durante a instalação -->
+- **Containers instead of virtual machines:** with 6 GB of RAM, an Ubuntu VM would use more than 1 GB. Both containers together use less than 500 MB (enforced with `mem_limit`).
+- **Fixed network name (`br-lab`) and fixed IPs:** makes it easy to point the IDS at the right interface in Phase 3 and to write SIEM searches.
+- **Targets:**
+  - `vitima-ssh`: SSH server with a weak password, used as a brute force target.
+  - `juice-shop`: intentionally vulnerable web application maintained by OWASP, used for web attacks.
 
-## Passos
+## Steps
 
-<!-- Liste os comandos principais com uma linha explicando cada um. -->
+<!-- Main commands, each with one line explaining what it does. -->
 
-## Verificação
+## Verification
 
-<!-- Cole aqui as saídas que comprovam que tudo funcionou e insira os prints:
-![Containers rodando](../assets/fase1-docker-ps.png)
+<!-- Command output and screenshots that prove everything works.
+![Containers running](../assets/phase1-docker-ps.png)
 -->
 
-## Segurança
+## Security
 
-- Firewall `ufw` com política padrão de **bloquear conexões de entrada**.
-- **Nenhuma porta publicada** pelos containers. O Docker cria regras próprias de firewall e ignora o `ufw` para portas publicadas; sem publicação, os alvos só são acessíveis a partir do notebook.
-- Senha da vítima guardada em `.env`, fora do repositório.
-- Containers sem reinício automático: só ficam ligados durante o estudo.
-- <!-- Observação sobre o grupo docker: anote aqui o que aprendeu -->
+- `ufw` firewall with a default policy of **deny incoming**.
+- **No published ports** on the containers. Docker creates its own firewall rules and bypasses `ufw` for published ports; without them, the targets are only reachable from the laptop.
+- Target password stored in `.env`, outside the repository (`git check-ignore` confirms it).
+- Containers do not restart automatically: they only run during study sessions.
+- Members of the `docker` group effectively have root privileges. Acceptable on a dedicated lab laptop, but a risk on a production server.
 
-## Problemas encontrados
+## Issues found
 
-| Problema | Como investiguei | Solução |
+| Issue | How I investigated | Fix |
 |---|---|---|
 | | | |

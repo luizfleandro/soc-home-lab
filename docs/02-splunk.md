@@ -1,43 +1,43 @@
-# Fase 2: SIEM (Splunk Free)
+# Phase 2: SIEM (Splunk Free)
 
-## Objetivo
+## Goal
 
-Instalar um SIEM no notebook e fazer ele receber os logs de autenticação da `vitima-ssh`, para investigar tentativas de login com buscas em SPL.
+Install a SIEM on the laptop and ingest the authentication logs from `vitima-ssh`, so login attempts can be investigated with SPL searches.
 
-## Decisões
+## Decisions
 
-- **Splunk Free em vez de Wazuh:** a implantação do Wazuh em Docker exige no mínimo 8 GB de RAM; o notebook tem 6 GB. O Splunk também é o SIEM mais citado em vagas de SOC.
-- **Licença Free:** até 500 MB de dados por dia, muito acima do que o lab gera.
-- **Instalado direto no Mint (não em container):** <!-- explique com suas palavras -->
-- **Executado pelo usuário `splunk`, não como root:** <!-- explique: menor privilégio -->
-- <!-- outras decisões -->
+- **Splunk Free instead of Wazuh:** the Wazuh Docker deployment requires at least 8 GB of RAM; the laptop has 6 GB. Splunk is also the SIEM most often listed in SOC job postings.
+- **Free license:** up to 500 MB of data per day, far above what the lab generates.
+- **Runs as the `splunk` user, not as root:** least privilege. Since version 10.2, Splunk no longer runs as root by default.
 
-## Passos
+## Steps
 
-<!-- Comandos principais, cada um com uma linha explicando o que faz. -->
+<!-- Main commands, each with one line explaining what it does. -->
 
-## Verificação
+## Verification
 
 <!--
-![Portas só em localhost](../assets/fase2-portas-localhost.png)
-![Primeira busca](../assets/fase2-busca-failed-password.png)
-![Contagem por IP](../assets/fase2-stats-por-ip.png)
-![Uso de memória](../assets/fase2-memoria.png)
+![Ports before the change](../assets/phase2-ports-before.png)
+![Ports bound to localhost](../assets/phase2-ports-localhost.png)
+![First search](../assets/phase2-failed-password-search.png)
+![Count by source IP](../assets/phase2-stats-by-ip.png)
+![Memory usage](../assets/phase2-memory.png)
 -->
 
-## Segurança
+## Security
 
-- **Sem login na licença Free:** qualquer pessoa que alcance a interface vira administrador. Por isso o Splunk escuta só em `127.0.0.1` (configs em `configs/splunk/`).
-- **Defesa em camadas:** além do bind em localhost, o `ufw` bloqueia conexões de entrada.
-- **Menor privilégio no acesso aos logs:** em vez de rodar o Splunk como root, o usuário `splunk` recebeu permissão só de leitura na pasta de logs, usando ACLs (`setfacl`).
-- <!-- outras observações -->
+- **No login on the Free license:** anyone who can reach the web interface becomes an administrator. That is why Splunk only listens on `127.0.0.1` (configs in `configs/splunk/`).
+- **Defense in depth:** besides binding to localhost, `ufw` blocks incoming connections.
+- **Least privilege for log access:** instead of running Splunk as root, the `splunk` user was granted read-only access to the log folder only, using ACLs (`setfacl`).
+- **Package integrity:** the installer was checked against the official SHA512 hash.
 
-## Observações da investigação
+## Investigation notes
 
-<!-- Ex.: por que o IP de origem dos logins aparece como 172.30.0.1? -->
+- **Why does the source IP show as 172.30.0.1?** The laptop has one IP address per network interface. When connecting to the target, the system uses the `br-lab` interface, which is on the same network, so the source IP logged is 172.30.0.1 rather than the Wi-Fi address. Lesson: the IP in a log reflects the last hop the server saw, not necessarily the real origin (NAT, proxies, CDNs).
+- **Wrong `host` field:** Splunk filled `host` with the laptop name, because it reads the log file from the laptop's disk. Fixed by setting a constant host value (`vitima-ssh`) on the input.
 
-## Problemas encontrados
+## Issues found
 
-| Problema | Como investiguei | Solução |
+| Issue | How I investigated | Fix |
 |---|---|---|
 | | | |
