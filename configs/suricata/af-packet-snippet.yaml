@@ -2,6 +2,7 @@
 # Faz o Suricata escutar na interface da rede do lab (br-lab).
 af-packet:
   - interface: br-lab
+    threads: 2
     cluster-id: 99
     cluster-type: cluster_flow
     defrag: yes
