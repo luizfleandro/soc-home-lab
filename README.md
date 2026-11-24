@@ -1,10 +1,6 @@
 # SOC Home Lab
 
- HEAD
-A **Blue Team / SOC** home lab built on a laptop with **6 GB of RAM** running **Linux Mint 22.3**, used to simulate attacks, detect them with a SIEM and an IDS, and document each investigation.
-
 A **Blue Team / SOC** home lab built on a laptop with **6 GB of RAM** running **Linux Mint 22.3**. It is used to simulate attacks, detect them with a SIEM and an IDS, and document each investigation.
- 833a5ab (Add Suricata config snippet and custom detection rules)
 
 > Work in progress. Current stage: **Phase 2, SIEM.**
 
@@ -51,10 +47,6 @@ flowchart LR
 - **Splunk Free instead of Wazuh:** the Wazuh Docker deployment requires at least 8 GB of RAM.
 - **No published ports:** the intentionally vulnerable targets are unreachable from the rest of the network.
 
-<<<<<<< HEAD
-## Disclaimer
-
-=======
 ## Usage
 
 ```bash
@@ -67,5 +59,4 @@ Splunk is available at `http://127.0.0.1:8000` (local access only).
 
 ## Disclaimer
 
->>>>>>> 833a5ab (Add Suricata config snippet and custom detection rules)
 All offensive tools were used **exclusively against the containers in this lab**.
